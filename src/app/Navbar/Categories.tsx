@@ -22,10 +22,10 @@ interface CategoriesProps {
 }
 
 const Categories = ({ categories }: CategoriesProps) => {
-    const params = useSearchParams();
-    const category = params?.get('category');
-    const pathname = usePathname();
-    const isMainPage = pathname === '/';
+    // const params = useSearchParams();
+    // const category = params?.get('category');
+    // const pathname = usePathname();
+    // const isMainPage = pathname === '/';
 
     // if (!isMainPage) {
     //     return null;
@@ -38,10 +38,7 @@ const Categories = ({ categories }: CategoriesProps) => {
                     <Link
                         key={item.id}
                         href={item.slug}
-                        className={`text-sm uppercase font-medium ${category === item.name.toLowerCase()
-                                ? 'text-teal-600'
-                                : 'text-gray-700 hover:text-teal-600'
-                            }`}
+                        className={`text-sm uppercase font-medium text-gray-700 hover:text-teal-600`}
                     >
                         {item.name}
                     </Link>

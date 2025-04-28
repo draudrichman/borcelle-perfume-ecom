@@ -1,7 +1,9 @@
 import { getPayload } from 'payload';
 import config from '@/payload.config';
 import Hero from '@/components/Hero';
-import { HeroImage } from '@/payload-types';
+import { HeroImage, Product } from '@/payload-types';
+import ProductGrid from '@/components/ProductGrid';
+import Container from '@/components/Container';
 
 export default async function Home() {
   // Fetch Navbar and Hero data from Payload
@@ -23,10 +25,20 @@ export default async function Home() {
     },
   }));
 
+  const productsResult = await payload.find({
+    collection: 'products',
+  });
+
+  const products: Product[] = productsResult.docs;
+
   return (
     <div>
       <Hero images={heroImages} />
       {/* Other page content */}
+      <Container>
+        {/* <h1 className="text-3xl font-bold mb-8">Our Products</h1> */}
+        <ProductGrid products={products} />
+      </Container>
     </div>
   );
 }
