@@ -5,6 +5,8 @@ import { Product } from '@/payload-types';
 import ProductDetails from '../product-details';
 import { JSX } from 'react';
 
+export const revalidate = 60;
+
 // Interface for the Lexical JSON structure
 interface LexicalTextNode {
     mode?: string;
