@@ -19,7 +19,7 @@ const dirname = path.dirname(filename);
 const triggerRevalidation = async () => {
   try {
     const response = await fetch(
-      `https://${process.env.VERCEL_URL}/api/revalidate?secret=${process.env.REVALIDATE_SECRET}`,
+      `${process.env.VERCEL_URL}/api/revalidate?secret=${process.env.REVALIDATE_SECRET}`,
       { method: "POST" }
     );
     if (!response.ok) {

@@ -9,7 +9,7 @@ import Container from '@/components/Container';
 
 
 export default async function Home() {
-  // Fetch Navbar and Hero data from Payload
+  // Fetch Navbar and Hero data from Payload  
   const payload = await getPayload({ config });
 
   // Fetch Hero images
