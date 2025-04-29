@@ -5,6 +5,9 @@ import { HeroImage, Product } from '@/payload-types';
 import ProductGrid from '@/components/ProductGrid';
 import Container from '@/components/Container';
 
+// export const revalidate = 60;
+
+
 export default async function Home() {
   // Fetch Navbar and Hero data from Payload
   const payload = await getPayload({ config });
