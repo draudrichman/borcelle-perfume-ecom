@@ -18,16 +18,22 @@ const dirname = path.dirname(filename);
 // Function to trigger revalidation
 const triggerRevalidation = async () => {
   try {
-    const response = await fetch(
-      `${process.env.SITE_URL}/api/revalidate?secret=${process.env.REVALIDATE_SECRET}`,
-      { method: "POST" }
-    );
+    const vercelUrl = process.env.SITE_URL; // Fallback to primary URL
+    const revalidateUrl = `${vercelUrl}/api/revalidate?secret=${process.env.REVALIDATE_SECRET}`;
+    console.log('Triggering revalidation with URL:', revalidateUrl);
+    console.log('VERCEL_URL:', process.env.VERCEL_URL);
+    console.log('REVALIDATE_SECRET:', process.env.REVALIDATE_SECRET ? 'Set' : 'Not set');
+
+    const response = await fetch(revalidateUrl, { method: 'POST' });
+    const responseText = await response.text();
+    console.log('Revalidation response:', response.status, responseText);
+
     if (!response.ok) {
-      throw new Error("Revalidation request failed");
+      throw new Error(`Revalidation request failed: ${response.status} ${responseText}`);
     }
-    console.log("Triggered revalidation");
+    console.log('Triggered revalidation successfully');
   } catch (error) {
-    console.error("Error triggering revalidation:", error);
+    console.error('Error triggering revalidation:', error);
   }
 };
 
