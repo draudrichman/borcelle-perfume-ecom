@@ -20,7 +20,7 @@ export default async function Home() {
     id: String(doc.id),
     title: doc.title,
     image: {
-      url: doc.url || '',
+      url: typeof doc.image === 'object' ? doc.image.url || '' : '',
       alt: doc.title,
     },
   }));
