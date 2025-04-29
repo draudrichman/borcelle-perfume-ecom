@@ -20,9 +20,9 @@ const triggerRevalidation = async () => {
   try {
     const vercelUrl = process.env.SITE_URL; // Fallback to primary URL
     const revalidateUrl = `${vercelUrl}/api/revalidate?secret=${process.env.REVALIDATE_SECRET}`;
-    console.log('Triggering revalidation with URL:', revalidateUrl);
-    console.log('VERCEL_URL:', process.env.VERCEL_URL);
-    console.log('REVALIDATE_SECRET:', process.env.REVALIDATE_SECRET ? 'Set' : 'Not set');
+    // console.log('Triggering revalidation with URL:', revalidateUrl);
+    // console.log('VERCEL_URL:', process.env.VERCEL_URL);
+    // console.log('REVALIDATE_SECRET:', process.env.REVALIDATE_SECRET ? 'Set' : 'Not set');
 
     const response = await fetch(revalidateUrl, { method: 'POST' });
     const responseText = await response.text();

@@ -4,20 +4,33 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Product, Media } from '@/payload-types';
 import Container from '@/components/Container';
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useCart } from '@/app/(frontend)/Cart/cart-context';
 
 interface ProductDetailsProps {
     product: Product;
     descriptionContent: JSX.Element;
+    loading?: boolean;
 }
 
-const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) => {
+const ProductDetails = ({ product, descriptionContent, loading }: ProductDetailsProps) => {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
+    const { addToCart, openCart } = useCart();
+
+    // Simulate brief loading delay for skeletons
+    useEffect(() => {
+        if (!loading) {
+            const timer = setTimeout(() => setIsLoading(false), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [loading]);
 
     const handleAddToBag = () => {
-        // Add to cart with the selected quantity
-        // addToCart(product, quantity);
+        addToCart(product, quantity);
+        openCart(); // Open the cart sidebar after adding item
     };
     return (
         <Container>
@@ -72,7 +85,9 @@ const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) =>
                             <div className="lg:flex lg:flex-col lg:items-center">
                                 {/* Main Image */}
                                 <div className="w-full overflow-hidden rounded-sm test-border">
-                                    {product.media && product.media.length > 0 ? (
+                                    {isLoading ? (
+                                        <Skeleton className="w-full aspect-square h-[400px] rounded-sm" />
+                                    ) : product.media && product.media.length > 0 ? (
                                         <div className="relative w-full aspect-square">
                                             <Image
                                                 className="absolute inset-0 h-full w-full object-cover"
@@ -86,7 +101,7 @@ const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) =>
                                                         ? product.media[selectedImageIndex].image.alt || product.name
                                                         : product.name
                                                 }
-                                                fill // Use fill to make the image fill the container
+                                                fill
                                             />
                                         </div>
                                     ) : (
@@ -97,19 +112,22 @@ const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) =>
                                 </div>
 
                                 {/* Thumbnail Buttons (Scrollable) */}
-                                {product.media && product.media.length > 0 && (
+                                {isLoading ? (
+                                    <div className="mt-2 w-full flex flex-row space-x-3 scrollbar-hide">
+                                        {[...Array(4)].map((_, index) => (
+                                            <Skeleton key={index} className="h-20 w-20 rounded-sm flex-shrink-0" />
+                                        ))}
+                                    </div>
+                                ) : product.media && product.media.length > 0 ? (
                                     <div className="mt-2 w-full overflow-x-auto flex flex-row space-x-3 scrollbar-hide">
                                         {product.media.map((mediaItem, index) => {
-                                            const image =
-                                                typeof mediaItem.image === 'object' ? mediaItem.image : null;
+                                            const image = typeof mediaItem.image === 'object' ? mediaItem.image : null;
                                             return (
                                                 <button
                                                     key={index}
                                                     type="button"
                                                     onClick={() => setSelectedImageIndex(index)}
-                                                    className={`cursor-pointer flex-shrink-0 aspect-square h-20 overflow-hidden rounded-sm border-2 text-center ${index === selectedImageIndex
-                                                        ? 'border-gray-900'
-                                                        : 'border-transparent'
+                                                    className={`cursor-pointer flex-shrink-0 aspect-square h-20 overflow-hidden rounded-sm border-2 text-center ${index === selectedImageIndex ? 'border-gray-900' : 'border-transparent'
                                                         }`}
                                                 >
                                                     <Image
@@ -123,7 +141,7 @@ const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) =>
                                             );
                                         })}
                                     </div>
-                                )}
+                                ) : null}
                             </div>
                         </div>
 
@@ -209,6 +227,7 @@ const ProductDetails = ({ product, descriptionContent }: ProductDetailsProps) =>
                                     <button
                                         type="button"
                                         disabled={!product.is_in_stock}
+                                        onClick={handleAddToBag}
                                         className={`cursor-pointer inline-flex items-center justify-center rounded-md border-2 border-transparent text-center text-base text-white transition-all duration-200 ease-in-out focus:shadow w-3/5 h-12 ${product.is_in_stock ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-400 cursor-not-allowed'
                                             }`}
                                     >

@@ -1,85 +1,111 @@
 import { notFound } from 'next/navigation';
-import { getPayload, JsonObject } from 'payload';
+import { getPayload } from 'payload';
 import config from '@/payload.config';
 import { Product } from '@/payload-types';
 import ProductDetails from '../product-details';
-import { JSX } from 'react';
+import { JSX, CSSProperties, ReactNode } from 'react';
 
-// export const revalidate = 60;
-
-// Interface for the Lexical JSON structure
+// Define Lexical node interfaces with strict typing
 interface LexicalTextNode {
     mode?: string;
     text?: string;
     type: string;
     style?: string;
     detail?: number;
-    format?: number | string;
+    format?: number; // Lexical uses numbers for text format (e.g., 1 for bold)
     version: number;
-    children?: LexicalNode[];
-    direction?: string | null;
-    textStyle?: string;
-    textFormat?: number;
+    [k: string]: unknown;
 }
 
-interface LexicalNode {
+interface LexicalLinebreakNode {
     type: string;
-    format?: string | number;
+    version: number;
+    [k: string]: unknown;
+}
+
+interface LexicalParagraphNode {
+    type: string;
+    format?: string; // e.g., 'center', 'right'
     indent?: number;
     version: number;
     children?: LexicalNode[];
-    direction?: string | null;
+    direction?: 'ltr' | 'rtl' | null;
     textStyle?: string;
     textFormat?: number;
+    [k: string]: unknown;
 }
+
+type LexicalNode = LexicalTextNode | LexicalLinebreakNode | LexicalParagraphNode | { type: string; version: number;[k: string]: unknown };
 
 interface LexicalJSON {
     root: {
         type: string;
         children: LexicalNode[];
-        direction: 'ltr' | 'rtl' | null;
+        direction?: 'ltr' | 'rtl' | null;
         format: string;
         indent: number;
         version: number;
     };
+    [k: string]: unknown;
 }
 
+// Function to render individual Lexical nodes
+const renderNode = (node: LexicalNode, index: number): JSX.Element | null => {
+    switch (node.type) {
+        case 'paragraph': {
+            const paragraphNode = node as LexicalParagraphNode;
+            let className = '';
+            if (paragraphNode.format === 'center') className = 'text-center';
+            else if (paragraphNode.format === 'end' || paragraphNode.format === 'right') className = 'text-right';
+
+            return (
+                <p key={index} className={`mb-4 ${className}`}>
+                    {paragraphNode.children?.map((child, childIndex) => renderNode(child, childIndex))}
+                </p>
+            );
+        }
+        case 'text': {
+            const textNode = node as LexicalTextNode;
+            const style: CSSProperties = {};
+
+            // Apply formatting (e.g., bold for format: 1)
+            if (textNode.format === 1) {
+                style.fontWeight = 'bold';
+            }
+
+            return (
+                <span key={index} style={style}>
+                    {textNode.text ?? ''}
+                </span>
+            );
+        }
+        case 'linebreak': {
+            return <br key={index} />;
+        }
+        default:
+            return null;
+    }
+};
+
 // Function to render Lexical JSON content
-const renderLexicalContent = (jsonContent: JsonObject): JSX.Element => {
+const renderLexicalContent = (jsonContent: string | LexicalJSON | undefined): JSX.Element => {
     try {
-        // Parse the content if it's a string
+        // Handle JSONField which could be string, object, or undefined
+        if (!jsonContent) {
+            return <p>No description available</p>;
+        }
+
         const content: LexicalJSON = typeof jsonContent === 'string'
             ? JSON.parse(jsonContent)
             : jsonContent;
 
-        if (!content || !content.root || !content.root.children) {
+        if (!content?.root?.children?.length) {
             return <p>No description available</p>;
         }
 
         return (
             <div className="lexical-content">
-                {content.root.children.map((node, index) => {
-                    if (node.type === 'paragraph') {
-                        const textContent = node.children
-                            ?.filter((child) => child.type === 'text')
-                            .map((textNode: LexicalTextNode) => textNode.text)
-                            .join(' ');
-
-                        if (!textContent) return null;
-
-                        // Apply different formatting based on node format
-                        let className = '';
-                        if (node.format === 'center') className = 'text-center';
-                        else if (node.format === 'end' || node.format === 'right') className = 'text-right';
-
-                        return (
-                            <p key={index} className={`mb-4 ${className}`}>
-                                {textContent}
-                            </p>
-                        );
-                    }
-                    return null;
-                })}
+                {content.root.children.map((node, index) => renderNode(node, index))}
             </div>
         );
     } catch (error) {
@@ -104,12 +130,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
     });
 
     // If no product is found, return 404
-    if (!productResult.docs || productResult.docs.length === 0) {
+    if (!productResult.docs?.length) {
         notFound();
     }
 
     const product: Product = productResult.docs[0];
+
+    // Ensure description is passed correctly
     const descriptionContent = renderLexicalContent(product.description);
 
-    return <ProductDetails product={product} descriptionContent={descriptionContent} />;
+    return <ProductDetails product={product} descriptionContent={descriptionContent} loading={false} />;
 }
+
