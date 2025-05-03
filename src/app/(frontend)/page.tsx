@@ -2,8 +2,12 @@ import { getPayload } from 'payload';
 import config from '@/payload.config';
 import Hero from '@/components/Hero';
 import { HeroImage, Product } from '@/payload-types';
-import ProductGrid from '@/components/ProductGrid';
 import Container from '@/components/Container';
+import FeaturedBrands from '@/components/FeaturedBrands';
+import FeaturedProductGrid from '@/components/FeaturedProductGrid';
+import { ShoppingBag } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 // export const revalidate = 60;
 
@@ -38,10 +42,26 @@ export default async function Home() {
     <div>
       <Hero images={heroImages} />
       {/* Other page content */}
-      <Container>
-        {/* <h1 className="text-3xl font-bold mb-8">Our Products</h1> */}
-        <ProductGrid products={products} />
-      </Container>
+      <div className='mb-10'>
+          {/* <h2 className="text-5xl font-bold text-center pb-5 uppercase font-poiret-one">Top Brands</h2> */}
+        <FeaturedBrands />
+        <Container>
+          {/* <h1 className="text-4xl font-bold text-center pt-10 uppercase font-poiret-one">Bestsellers</h1> */}
+          <FeaturedProductGrid products={products} />
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <h2 className="text-5xl font-bold tracking-tight font-poiret-one mt-20 uppercase">Feeling fabulous starts here</h2>
+            <p className="max-w-[600px] text-muted-foreground">
+              Discover our latest collections and find your perfect fit
+            </p>
+            <Button asChild size="lg" variant={'outlineblack'}>
+              <Link href="/search?query=">
+                <ShoppingBag className="w-4 h-4 mr-2" />
+                Shop Now
+              </Link>
+            </Button>
+          </div>
+        </Container>
+      </div>
     </div>
   );
 }

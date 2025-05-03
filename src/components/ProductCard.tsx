@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Product, Media } from '@/payload-types';
+import { formatBDTNumber } from '@/lib/utils';
 
 interface ProductCardProps {
     product: Product;
@@ -72,11 +73,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <div className="mt-1">
                         {isOnSale && (
                             <del className="text-xs font-semibold text-gray-600 sm:text-sm mr-2">
-                                ৳ {product.price.toFixed(2)}
+                                ৳ {formatBDTNumber(product.price)}
                             </del>
                         )}
-                        <span className="text-xs font-normal sm:text-sm md:text-base">
-                            ৳ {isOnSale ? product.offer_price!.toFixed(0) : product.price.toFixed(0)}
+                        <span>
+                            <div>
+                                <span className='font-normal'>৳ </span>
+                                <span className="text-xs font-normal sm:text-sm md:text-base">
+                                    {isOnSale ? formatBDTNumber(product.offer_price!) : formatBDTNumber(product.price)}
+                                </span>
+                            </div>
                         </span>
                     </div>
                     <div className="mt-1 mb-2 flex justify-center items-center">

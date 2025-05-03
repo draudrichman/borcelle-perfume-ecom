@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-black text-white py-10">
-            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <footer className="bg-gray-900 text-white py-10">
+            <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Main Footer Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {/* Help Section */}
@@ -48,7 +48,8 @@ const Footer: React.FC = () => {
                                 alt="Payment gateway"
                                 layout="fill"
                                 objectFit="contain"
-                                className="w-full h-full"
+                                objectPosition="left"
+                                className="w-full h-full sm:object-center"
                             />
                         </div>
                     </div>

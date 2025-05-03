@@ -6,7 +6,7 @@ import { Product, Media } from '@/payload-types';
 import Container from '@/components/Container';
 import { JSX, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCart } from '@/app/(frontend)/Cart/cart-context';
+import { useCart } from '@/app/components/Cart/cart-context';
 
 interface ProductDetailsProps {
     product: Product;
@@ -178,7 +178,7 @@ const ProductDetails = ({ product, descriptionContent, loading }: ProductDetails
                             {/* Price and Add to Cart */}
                             <div className="mt-10 flex flex-col items-start justify-between space-y-4 py-4 sm:flex-col sm:space-y-0">
                                 <div className="flex items-end mb-5">
-                                    <h1 className="text-xl font-mono">
+                                    <h1 className="text-xl">
                                         ৳ {product.offer_price ? product.offer_price.toFixed(0) : product.price.toFixed(0)}
                                     </h1>
                                 </div>

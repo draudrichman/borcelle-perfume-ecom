@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import SearchBar from './SearchBar';
-import { useCart } from '../(frontend)/Cart/cart-context';
+import { useCart } from '../Cart/cart-context';
 
 const NavbarClient = () => {
     const { openCart, cartItems } = useCart();

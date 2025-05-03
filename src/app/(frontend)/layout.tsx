@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poiret_One, Montserrat } from "next/font/google";
 import "./globals.css";
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../components/Navbar/Navbar";
 import Footer from "@/components/Footer";
-import CartSidebarView from "./Cart/cart-sidebar-view";
-import { CartProvider } from "./Cart/cart-context";
+import CartSidebarView from "../components/Cart/cart-sidebar-view";
+import { CartProvider } from "../components/Cart/cart-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
+  // display: "swap",
+  // weight: "400"
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poiretOne = Poiret_One({
+  variable: "--font-poiret-one",
   subsets: ["latin"],
+  // display: "swap",
+  weight: "400"
 });
+
 
 export const metadata: Metadata = {
   title: "Borcelle - Perfumes",
@@ -29,11 +35,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`flex flex-col min-h-screen ${poiretOne.variable} ${montserrat.variable} font-montserrat antialiased`}
       >
         <CartProvider>
           <Navbar />
-          {children}
+          <div className="flex-grow">
+            {children}
+          </div>
           <CartSidebarView />
           <Footer />
         </CartProvider>

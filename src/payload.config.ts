@@ -10,7 +10,7 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { HeroImages } from "./collections/HeroImages";
 import Products from "./collections/Products";
-import { Navbar } from "./app/Navbar/navbar-config";
+import { Navbar } from "./app/components/Navbar/navbar-config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -24,16 +24,18 @@ const triggerRevalidation = async () => {
     // console.log('VERCEL_URL:', process.env.VERCEL_URL);
     // console.log('REVALIDATE_SECRET:', process.env.REVALIDATE_SECRET ? 'Set' : 'Not set');
 
-    const response = await fetch(revalidateUrl, { method: 'POST' });
+    const response = await fetch(revalidateUrl, { method: "POST" });
     const responseText = await response.text();
-    console.log('Revalidation response:', response.status, responseText);
+    console.log("Revalidation response:", response.status, responseText);
 
     if (!response.ok) {
-      throw new Error(`Revalidation request failed: ${response.status} ${responseText}`);
+      throw new Error(
+        `Revalidation request failed: ${response.status} ${responseText}`
+      );
     }
-    console.log('Triggered revalidation successfully');
+    console.log("Triggered revalidation successfully");
   } catch (error) {
-    console.error('Error triggering revalidation:', error);
+    console.error("Error triggering revalidation:", error);
   }
 };
 

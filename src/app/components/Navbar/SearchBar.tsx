@@ -14,7 +14,7 @@ const SearchBar = () => {
         const name = formData.get("name") as string;
 
         if (name) {
-            router.push(`/${name}`);
+            router.push(`/search?query=${name}`);
         }
         setIsOpen(false); // Close the search bar after submission
     };

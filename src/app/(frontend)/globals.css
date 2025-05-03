@@ -6,8 +6,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono); */
+  --font-montserrat: var(--font-montserrat);
+  --font-poiret-one: var(--font-poiret-one);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -47,6 +49,46 @@
   /* .test-border {
     @apply border-1 border-solid;
   } */
+
+  .scroller {
+    overflow: hidden;
+  }
+  
+
+  .scroller__inner {
+    padding-block: 1rem;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .scroller[data-animated="true"] .scroller__inner {
+    width: max-content;
+    flex-wrap: nowrap;
+    animation: scroll var(--_animation-duration, 40s)
+      var(--_animation-direction, forwards) linear infinite;
+  }
+
+  .scroller[data-direction="right"] {
+    --_animation-direction: reverse;
+  }
+
+  .scroller[data-direction="left"] {
+    --_animation-direction: forwards;
+  }
+
+  .scroller[data-speed="fast"] {
+    --_animation-duration: 20s;
+  }
+
+  .scroller[data-speed="slow"] {
+    --_animation-duration: 60s;
+  }
+}
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari, and Edge */
@@ -57,6 +99,35 @@
 /* Hide scrollbar for Firefox */
 .scrollbar-hide {
   scrollbar-width: none;
+}
+
+/* Ensure mega menu aligns with the navbar and has a grid layout */
+.DropdownMenuContent {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.DropdownMenuContent .CardContent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.DropdownMenuItem {
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.DropdownMenuItem:hover {
+  background-color: #f3f4f6;
+}
+
+/* Position adjustment for larger screens */
+@media (min-width: 640px) {
+  .DropdownMenuContent {
+    margin-left: -1rem; /* Adjust to align with navbar edges */
+    width: calc(100% + 2rem); /* Extend width to match navbar */
+  }
 }
 
 :root {

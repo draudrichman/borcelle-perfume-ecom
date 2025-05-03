@@ -37,11 +37,11 @@ export default function Hero({ images }: HeroProps) {
                 const width = window.innerWidth;
                 let vhValue;
                 if (width >= 1024) {
-                    vhValue = '70vh'; // Large screens
+                    vhValue = '60vh'; // Large screens
                 } else if (width >= 640) {
-                    vhValue = '60vh'; // Medium screens
+                    vhValue = '50vh'; // Medium screens
                 } else {
-                    vhValue = '50vh'; // Small screens
+                    vhValue = '40vh'; // Small screens
                 }
                 document.documentElement.style.setProperty('--vh', vhValue);
             } catch (error) {
