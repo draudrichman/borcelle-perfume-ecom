@@ -222,8 +222,6 @@ export interface Customer {
   id: number;
   user?: (number | null) | User;
   email?: string | null;
-  gender?: ('Male' | 'Female' | 'Non-binary' | 'Prefer not to say') | null;
-  date_of_birth?: string | null;
   orders?: (number | Order)[] | null;
   favorites?: (number | Product)[] | null;
   updatedAt: string;
@@ -242,8 +240,6 @@ export interface Order {
     id?: string | null;
   }[];
   total_amount: number;
-  guest_gender?: ('Male' | 'Female' | 'Non-binary' | 'Prefer not to say') | null;
-  guest_date_of_birth?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -397,8 +393,6 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface CustomersSelect<T extends boolean = true> {
   user?: T;
   email?: T;
-  gender?: T;
-  date_of_birth?: T;
   orders?: T;
   favorites?: T;
   updatedAt?: T;
@@ -418,8 +412,6 @@ export interface OrdersSelect<T extends boolean = true> {
         id?: T;
       };
   total_amount?: T;
-  guest_gender?: T;
-  guest_date_of_birth?: T;
   updatedAt?: T;
   createdAt?: T;
 }

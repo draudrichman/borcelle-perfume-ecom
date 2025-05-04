@@ -58,8 +58,8 @@ const CartSidebarView = () => {
                                 <span>Total</span>
                                 <span>৳ {formatBDTNumber(subtotal)} BDT</span>
                             </div>
-                            <Link href="/checkout">
-                                <button className="w-full bg-blue-600 text-white py-3 rounded-full mt-2">
+                            <Link href="/cart" onClick={closeCart}>
+                                <button className="w-full bg-gray-900 text-white py-3 rounded-sm mt-2 cursor-pointer">
                                     Proceed to Checkout
                                 </button>
                             </Link>
