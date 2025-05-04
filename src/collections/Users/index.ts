@@ -48,8 +48,6 @@ const Users: CollectionConfig = {
                   data: {
                     user: result.id,
                     email: result.email,
-                    gender: "Prefer not to say",
-                    date_of_birth: null,
                   },
                 });
               }
