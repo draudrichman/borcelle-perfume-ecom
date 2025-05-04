@@ -4,7 +4,8 @@ import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "@/components/Footer";
 import CartSidebarView from "../components/Cart/cart-sidebar-view";
-import { CartProvider } from "../components/Cart/cart-context";
+import { Providers } from "../_providers/Providers";
+import { AuthModal } from "../components/Auth/AuthModal";
 
 
 const montserrat = Montserrat({
@@ -37,14 +38,15 @@ export default function RootLayout({
       <body
         className={`flex flex-col min-h-screen ${poiretOne.variable} ${montserrat.variable} font-montserrat antialiased`}
       >
-        <CartProvider>
-          <Navbar />
-          <div className="flex-grow">
-            {children}
-          </div>
-          <CartSidebarView />
-          <Footer />
-        </CartProvider>
+        <Providers>
+            <Navbar />
+            <div className="flex-grow">
+              {children}
+            </div>
+            <CartSidebarView />
+            <AuthModal />
+            <Footer />
+        </Providers>
       </body>
     </html>
   );

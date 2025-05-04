@@ -6,7 +6,7 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
-import { Users } from "./collections/Users";
+import Users from "./collections/Users";
 import { Media } from "./collections/Media";
 import { HeroImages } from "./collections/HeroImages";
 import Products from "./collections/Products";
@@ -49,12 +49,7 @@ export default buildConfig({
     },
   },
   collections: [
-    {
-      ...Users,
-      hooks: {
-        afterChange: [triggerRevalidation],
-      },
-    },
+    Users,
     {
       ...Media,
       hooks: {

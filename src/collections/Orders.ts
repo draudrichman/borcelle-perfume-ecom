@@ -38,18 +38,6 @@ const Orders: CollectionConfig = {
       required: true,
       min: 0,
     },
-    {
-      name: "guest_gender",
-      type: "select",
-      options: ["Male", "Female", "Non-binary", "Prefer not to say"],
-      required: false,
-      defaultValue: "Prefer not to say",
-    },
-    {
-      name: "guest_date_of_birth",
-      type: "date",
-      required: false,
-    },
   ],
   timestamps: true,
 };

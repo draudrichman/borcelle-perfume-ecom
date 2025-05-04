@@ -8,6 +8,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import useAuthModal from '../Auth/hooks/useAuthModal';
+// import { useAuth } from '../Auth/context/AuthContext';
+import { useAuth } from '@/app/_providers/AuthProvider';
 
 const NavbarClient = () => {
     const { openCart, cartItems } = useCart();
@@ -17,6 +20,8 @@ const NavbarClient = () => {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const accountRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const { user, logout, status } = useAuth();
+    const { onOpenLogin, onOpenSignup } = useAuthModal();
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,6 +48,15 @@ const NavbarClient = () => {
         }, 300);
     };
 
+    const handleLogout = async () => {
+        try {
+            await logout();
+            setIsAccountOpen(false);
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     useEffect(() => {
         return () => {
             if (timeoutRef.current) {
@@ -50,6 +64,10 @@ const NavbarClient = () => {
             }
         };
     }, []);
+
+    // if (status === undefined) {
+    //     return <div>Loading...</div>; // Optional: Show loading state while fetching user
+    // }
 
     return (
         <div className="flex items-center justify-between gap-3 md:gap-6 py-4 relative">
@@ -73,25 +91,16 @@ const NavbarClient = () => {
                                 className="w-[200px] md:w-[300px]"
                                 autoFocus
                             />
-                            {/* <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0"
-                                onClick={() => setIsSearchOpen(false)}
-                            >
-                                <X className="h-4 w-4" />
-                                <span className="sr-only">Close search</span>
-                            </Button> */}
                         </form>
                     </div>
                 ) : (
-                    <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)} className='cursor-pointer'>
+                    <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)} className="cursor-pointer">
                         <Search className="text-gray-900 w-6 h-6" />
                         <span className="sr-only">Search</span>
                     </Button>
                 )}
 
-                {/* User Account Icon with Dropdown */}
+                {/* User Account Dropdown */}
                 <div
                     className="relative"
                     ref={accountRef}
@@ -109,29 +118,54 @@ const NavbarClient = () => {
                     </Button>
                     {isAccountOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md z-50">
-                            <Link
-                                href="/account"
-                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                            >
-                                My Account
-                            </Link>
-                            <Link
-                                href="/orders"
-                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                            >
-                                My Orders
-                            </Link>
-                            <Link
-                                href="/logout"
-                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                            >
-                                Logout
-                            </Link>
+                            {user ? (
+                                <>
+                                    <Link
+                                        href="/account"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                    >
+                                        My Account
+                                    </Link>
+                                    <Link
+                                        href="/orders"
+                                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                    >
+                                        My Orders
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                    >
+                                        Logout
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => {
+                                            onOpenLogin();
+                                            setIsAccountOpen(false);
+                                        }}
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                    >
+                                        Login
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            onOpenSignup();
+                                            setIsAccountOpen(false);
+                                        }}
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                    >
+                                        Sign Up
+                                    </button>
+                                </>
+                            )}
                         </div>
                     )}
                 </div>
 
-                {/* Shopping Cart (Unchanged) */}
+                {/* Shopping Cart */}
                 <div className="flex-shrink-0 relative">
                     <Button variant="ghost" size="icon" onClick={openCart} className="relative cursor-pointer">
                         <ShoppingCart className="text-gray-900 w-6 h-6" />
