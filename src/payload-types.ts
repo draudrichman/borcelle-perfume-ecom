@@ -71,6 +71,8 @@ export interface Config {
     media: Media;
     heroImages: HeroImage;
     products: Product;
+    customers: Customer;
+    orders: Order;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +83,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     heroImages: HeroImagesSelect<false> | HeroImagesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -211,6 +215,39 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: number;
+  user?: (number | null) | User;
+  email?: string | null;
+  gender?: ('Male' | 'Female' | 'Non-binary' | 'Prefer not to say') | null;
+  date_of_birth?: string | null;
+  orders?: (number | Order)[] | null;
+  favorites?: (number | Product)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  customer: number | Customer;
+  products: {
+    product: number | Product;
+    quantity: number;
+    id?: string | null;
+  }[];
+  total_amount: number;
+  guest_gender?: ('Male' | 'Female' | 'Non-binary' | 'Prefer not to say') | null;
+  guest_date_of_birth?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -231,6 +268,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: number | Customer;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -340,6 +385,39 @@ export interface ProductsSelect<T extends boolean = true> {
   is_in_stock?: T;
   top_pick?: T;
   new_arrival?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  user?: T;
+  email?: T;
+  gender?: T;
+  date_of_birth?: T;
+  orders?: T;
+  favorites?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  customer?: T;
+  products?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  total_amount?: T;
+  guest_gender?: T;
+  guest_date_of_birth?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -69,7 +69,7 @@ const Categories = ({ categories }: CategoriesProps) => {
                     {categories.map((category) => (
                         <button
                             key={category.id}
-                            className="flex items-center gap-1 hover:text-gray-600 transition-colors"
+                            className="flex items-center gap-1 hover:font-semibold transition-colors"
                             onMouseEnter={() => handleMouseEnter(category.slug)}
                         >
                             {category.name}

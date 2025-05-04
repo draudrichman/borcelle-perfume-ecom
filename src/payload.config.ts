@@ -11,6 +11,8 @@ import { Media } from "./collections/Media";
 import { HeroImages } from "./collections/HeroImages";
 import Products from "./collections/Products";
 import { Navbar } from "./app/components/Navbar/navbar-config";
+import Customers from "./collections/Customers";
+import Orders from "./collections/Orders";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -71,6 +73,8 @@ export default buildConfig({
         afterChange: [triggerRevalidation],
       },
     },
+    Customers,
+    Orders,
   ],
   globals: [
     {
