@@ -1,21 +1,18 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { ShoppingCart, Search, User, X } from 'lucide-react';
-import { useCart } from '../Cart/cart-context';
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Search, ShoppingCart, User } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import useAuthModal from '../Auth/hooks/useAuthModal';
-// import { useAuth } from '../Auth/context/AuthContext';
+import { useCart } from '../Cart/cart-context';
 import { useAuth } from '@/app/_providers/AuthProvider';
 
 const NavbarClient = () => {
     const { openCart, cartItems } = useCart();
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const accountRef = useRef<HTMLDivElement>(null);
@@ -23,16 +20,6 @@ const NavbarClient = () => {
     const { user, logout, status } = useAuth();
     const { onOpenLogin, onOpenSignup } = useAuthModal();
 
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get("name") as string;
-
-        if (name) {
-            router.push(`/search?query=${name}`);
-        }
-        setIsSearchOpen(false);
-    };
 
     const handleAccountMouseEnter = () => {
         if (timeoutRef.current) {
