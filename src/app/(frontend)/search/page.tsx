@@ -2,6 +2,7 @@ import { getPayload } from 'payload';
 import config from '@/payload.config';
 import ProductGrid from '@/components/ProductGrid';
 import FilterSort from '@/components/FilterSort';
+import SearchBar from '@/components/SearchBar'; // Import the new SearchBar component
 import { Product } from '@/payload-types';
 import Container from '@/components/Container';
 
@@ -53,9 +54,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     return (
         <div className="container mx-auto px-4 py-8">
             <Container>
-                <h1 className="text-2xl font-bold mb-6">
+                <h1 className="text-2xl font-semibold mb-4">
                     Search Results for &quot;{query || 'All Products'}&quot;
                 </h1>
+                <SearchBar />
                 <FilterSort
                     products={productsResult.docs as Product[]}
                     fullMinPrice={Math.floor(fullMinPrice)}

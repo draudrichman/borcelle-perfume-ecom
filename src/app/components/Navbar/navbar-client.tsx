@@ -80,25 +80,15 @@ const NavbarClient = () => {
 
             {/* Right Side: Search, User, Cart */}
             <div className="ml-auto flex items-center gap-2">
-                {/* Search Icon/Button */}
-                {isSearchOpen ? (
-                    <div className="relative flex items-center">
-                        <form onSubmit={handleSearch}>
-                            <Input
-                                type="search"
-                                name="name"
-                                placeholder="Search products..."
-                                className="w-[200px] md:w-[300px]"
-                                autoFocus
-                            />
-                        </form>
-                    </div>
-                ) : (
-                    <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)} className="cursor-pointer">
-                        <Search className="text-gray-900 w-6 h-6" />
-                        <span className="sr-only">Search</span>
-                    </Button>
-                )}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => router.push('/search?query=')}
+                    className="cursor-pointer"
+                >
+                    <Search className="text-gray-900 w-6 h-6" />
+                    <span className="sr-only">Search</span>
+                </Button>
 
                 {/* User Account Dropdown */}
                 <div
