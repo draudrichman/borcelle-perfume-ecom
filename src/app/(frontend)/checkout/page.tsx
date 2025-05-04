@@ -174,7 +174,7 @@ export default function CheckoutPage() {
                                                     <SelectItem value="CHT">Chittagong</SelectItem>
                                                     <SelectItem value="CHD">Chuadanga</SelectItem>
                                                     <SelectItem value="COM">Comilla</SelectItem>
-                                                    <SelectItem value="COX">Cox's Bazar</SelectItem>
+                                                    <SelectItem value="COX">Cox&apos;s Bazar</SelectItem>
                                                     <SelectItem value="DHK">Dhaka</SelectItem>
                                                     <SelectItem value="DIN">Dinajpur</SelectItem>
                                                     <SelectItem value="FAR">Faridpur</SelectItem>
